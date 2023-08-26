@@ -37,7 +37,7 @@ yarn codegen
 
 yarn add @apollo/client
 
-Refatorando projeto para Graphql ( yoga / photos )
+Refatorando projeto para Graphql ( yoga / pothos )
 
 yarn add graphql graphql-yoga
 

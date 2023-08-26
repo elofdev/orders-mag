@@ -5,6 +5,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator pothos {
+  provider = "prisma-pothos-types"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -41,7 +45,7 @@ model Client {
 model Category {
   id   String  @id @default(uuid())
   name String
-  tax  Decimal
+  tax  Decimal @db.Decimal(5, 4)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -73,12 +77,12 @@ model Order {
   id                   String  @id @default(uuid())
   productName          String
   amount               Int // Quantidade
-  saleValue            Decimal // Valor de venda
-  rate                 Decimal // Taxa
-  valueWithTax         Decimal // Valor Com taxa
-  valueWithoutTax      Decimal // Valor sem taxa
-  totalValueWithTax    Decimal // Total Com Taxa
-  totalValueWithoutTax Decimal // Total sem Taxa
+  saleValue            Float // Valor de venda
+  tax                  Decimal @db.Decimal(5, 4) // Taxa
+  valueWithTax         Float // Valor Com taxa
+  valueWithoutTax      Float // Valor sem taxa
+  totalValueWithTax    Float // Total Com Taxa
+  totalValueWithoutTax Float // Total sem Taxa
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

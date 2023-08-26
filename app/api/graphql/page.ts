@@ -1,39 +1,18 @@
-import { ApolloServer } from 'apollo-server-micro';
-import { RequestHandler } from 'micro';
-import Cors from 'micro-cors';
-import { NextApiHandler } from 'next';
-import { context } from '../../../graphql/context';
-import { resolvers } from '../../../graphql/resolvers';
-import { typeDefs } from '../../../graphql/typeDefs';
+// /pages/api/graphql.ts
+import { createYoga } from 'graphql-yoga'
+import type { NextApiRequest, NextApiResponse } from 'next'
+import { schema } from '../../../graphql/schema'
 
-
-const cors = Cors();
+export default createYoga<{
+  req: NextApiRequest
+  res: NextApiResponse
+}>({
+  schema,
+  graphqlEndpoint: '/api/graphql/page.ts'
+})
 
 export const config = {
-    api: {
-        bodyParser: false
-    }
+  api: {
+    bodyParser: false
+  }
 }
-
-
-const apolloServer = new ApolloServer({ typeDefs, resolvers, context });
-const startServer = apolloServer.start();
-
-const handler: NextApiHandler = async (req, res) => {
-    if (req.method === 'OPTIONS') {
-        res.end();
-        return false;
-    }
-
-    await startServer;
-
-    const apolloHandler = apolloServer.createHandler({
-        path: '/api/graphql'
-    });
-
-    console.log(apolloHandler);
-
-    return apolloHandler(req, res);
-}
-
-export default cors(handler as RequestHandler);
